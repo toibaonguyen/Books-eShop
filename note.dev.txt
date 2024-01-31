@@ -1,0 +1,9 @@
+===============================This note is about things that i learn when making this project==================================
+- Đối với nodejs khi thực hiện dòng code sau:
+    const a= require('abc') 
+nghĩa là nó đã cache lại nên mỗi khi gọi lại nó sẽ thực hiện gọi lại cái cũ chứ không gọi trực tiếp từ nguồn
+- Sử dụng singleton cho kết nối DB vì đối với case sử dụng này tôi chỉ muốn một thực thể duy nhất một thực thể của database được 
+sử dụng cho toàn bộ hệ thống. Đồng thời tôi cũng sử dụng strategy pattern + factory method để có thể sử dụng cho các 
+- Connection pool là gì? Có thể hiểu như này mỗi khi có một yêu cầu đến database để thực hiện thao tác thêm, xóa, sửa... ta cần 
+một connection cho quá trình đó connection ở đây có thể hiểu như một chiếc taxi vậy và những yêu cầu là hành khách, và pool ở đây 
+là nhà cung cấp dịch vụ taxi, ta sử dụng mongoose thì nó đã giúp ta thực hiện điều đó

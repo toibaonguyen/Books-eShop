@@ -6,9 +6,9 @@ import compression from 'compression';
 const app = express();
 
 //init middleware
-app.use(morgan("dev"))
-app.use(helmet())
-app.use(compression())
+app.use(morgan("dev")) //use this for tracing the request
+app.use(helmet()) // use this for base security
+app.use(compression()) //use this to compress the data when response
 
 //init DB
 
