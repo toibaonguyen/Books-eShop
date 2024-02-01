@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
-import SystemHealthCheckerConfig from "../configs/SystemHealthCheckerConfig";
 import process from "process";
-class SystemHealthChecker {
+import { SystemHealthCheckerConfig } from "../configs/system.config";
+
+
+export class SystemHealthChecker {
     private config: SystemHealthCheckerConfig;
     private intervalCheckAllID: NodeJS.Timeout | undefined;
     public constructor(config: SystemHealthCheckerConfig) {

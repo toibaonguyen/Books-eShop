@@ -1,4 +1,4 @@
-class SystemHealthCheckerConfig {
+export class SystemHealthCheckerConfig {
     public maxDatabaseConnections: number;
     public checkIntervalTime: number;
     public constructor(maxDatabaseConnections: number, checkIntervalTime: number) {
@@ -7,4 +7,3 @@ class SystemHealthCheckerConfig {
     }
 }
 
-export default SystemHealthCheckerConfig;
