@@ -6,11 +6,8 @@
 
 import mongoose from "mongoose";
 import { DatabaseConfig } from "../configs/database.config";
+import { DatabaseTypes } from "../constants/Database.constant";
 
-export enum DatabaseName {
-    MONGODB,
-    POSTGRE
-}
 
 //I apply factory method below:
 interface IDatabase {
@@ -28,7 +25,7 @@ class MongoDB implements IDatabase {
     public async Connect(): Promise<void> {
         try {
             await mongoose.connect(this.uri, this.connectOptions);
-            console.log("Connect to database successfully!");
+            console.log("Connect to mongoDB successfully!");
         }
         catch (e) {
             console.error(e);
@@ -85,15 +82,15 @@ export class SingletonDatabase implements IDatabase {
     private constructor(database: IDatabase) {
         this.core = database;
     }
-    public static GetInstance(databaseName: DatabaseName, databaseConfig: DatabaseConfig): SingletonDatabase {
+    public static GetInstance(databaseName: DatabaseTypes, databaseConfig: DatabaseConfig): SingletonDatabase {
         if (!SingletonDatabase.instance) {
             let db;
             switch (databaseName) {
-                case DatabaseName.MONGODB:
+                case DatabaseTypes.MONGODB:
                     const mongoDBCreator = new MongoDBCreator(databaseConfig);
                     db = mongoDBCreator.CreateDatabase();
                     break;
-                case DatabaseName.POSTGRE:
+                case DatabaseTypes.POSTGRE:
                     console.log("Because i'm just use mongoDB in this, so this will return an instance of mongoDB!");
                     const postgreSQLCreator = new MongoDBCreator(databaseConfig);
                     db = postgreSQLCreator.CreateDatabase();
@@ -111,3 +108,4 @@ export class SingletonDatabase implements IDatabase {
         await this.core.Disconnect();
     }
 }
+

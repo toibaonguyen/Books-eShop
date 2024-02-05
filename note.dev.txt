@@ -6,3 +6,4 @@ nghĩa là nó đã cache lại nên mỗi khi gọi lại nó sẽ thực hiệ
 - Connection pool là gì? Có thể hiểu như này mỗi khi có một yêu cầu đến database để thực hiện thao tác thêm, xóa, sửa... ta cần 
 một connection cho quá trình đó connection ở đây có thể hiểu như một chiếc taxi vậy và những yêu cầu là hành khách, và pool ở đây 
 là nhà cung cấp dịch vụ taxi, ta sử dụng mongoose thì nó đã giúp ta thực hiện điều đó
+- Publickey và privatekey khi được sinh ra bởi thuật toán bất đối nó không phải là string

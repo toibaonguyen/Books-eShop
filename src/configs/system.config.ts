@@ -1,3 +1,5 @@
+import { Algorithm } from "jsonwebtoken";
+
 export class SystemHealthCheckerConfig {
     public maxDatabaseConnections: number;
     public checkIntervalTime: number;
@@ -7,3 +9,13 @@ export class SystemHealthCheckerConfig {
     }
 }
 
+export class AuthTokenPairConfig {
+    public accessTokenExpiresTime: number | string | undefined;
+    public refreshTokenExpiresTime: number | string | undefined;
+    public algorithm: Algorithm | undefined;
+    public constructor(accessTokenExpiresTime: number, refreshTokenExpiresTime: number, algorithm: Algorithm | undefined) {
+        this.accessTokenExpiresTime = accessTokenExpiresTime;
+        this.refreshTokenExpiresTime = refreshTokenExpiresTime;
+        this.algorithm = algorithm;
+    }
+}
