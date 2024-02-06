@@ -38,14 +38,16 @@ const customerSchema = new mongoose.Schema({
     },
     type:
     {
-        type: CustomerType,
+        type: String,
         require: true,
+        enum: Object.values(CustomerType),
         default: CustomerType.COMMON
     },
     gender:
     {
-        type: Gender,
-        require: true
+        type: String,
+        require: true,
+        enum: Object.values(Gender),
     },
     birthday:
     {

@@ -12,6 +12,7 @@ export class CustomerAccessService {
     public async register(customer: CustomerDTO) {
         try {
             const matchedEmailRegisteredCustomer = await CustomerModel.findOne({ email: customer.email }).lean();
+            console.log(matchedEmailRegisteredCustomer)
             if (matchedEmailRegisteredCustomer) {
                 throw new BadRequestError(this.ALREADY_REGISTERED_CUSTOMER);
             }
@@ -31,10 +32,8 @@ export class CustomerAccessService {
                 const authTokenService = new AuthTokenService()
                 const tokens = await authTokenService.CreateTokenPair({ payload: { id: newCustomer._id, email: newCustomer.email }, uid: newCustomer._id })
                 return {
-                    metadata: {
-                        customer: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: newCustomer }),
-                        tokens
-                    }
+                    customer: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: newCustomer }),
+                    tokens
                 }
             }
         }

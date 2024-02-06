@@ -26,8 +26,7 @@ export class AuthTokenService {
                     format: 'pem'
                 }
             });
-            const tokens = TokenUtil.CreateTokenPair(payload, privateKey,
-                { algorithm: "RS256", refreshTokenExpiresTime: "1h", accessTokenExpiresTime: "15m" });
+            const tokens = TokenUtil.CreateTokenPair(payload, privateKey, { algorithm: "RS256", refreshTokenExpiresTime: "1h", accessTokenExpiresTime: "15m" });
             await AuthTokenKeysModel.create({ user: uid, publicKey: publicKey })
             return tokens;
         }

@@ -20,9 +20,9 @@ const apiKeySchema = new mongoose.Schema({
     },
     permissions:
     {
-        type: [ApiKeyPermissions],
+        type: String,
         require: true,
-        default: []
+        enum: Object.values(ApiKeyPermissions)
     }
 
 }, { timestamps: true, collection: COLLECTION_NAME });

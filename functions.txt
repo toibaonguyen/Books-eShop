@@ -1,0 +1,24 @@
+Customer:
+- Login
+- Signup
+- Preorder (VIP1)
+- Buy books
+- Chat with admin
+- review books
+- Custom perorder (VIP2)
+- Auction (VIP1)
+- Tracing orders
+
+Admin:
+- Login
+- Manage deliveryman account
+- Manage customer account
+- Create new products
+- Create discounts
+- Watch financials
+- Create auction session
+
+Delivery person:
+- Login
+- Check order
+- 

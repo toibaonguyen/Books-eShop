@@ -6,8 +6,9 @@ export class TokenUtil {
         try {
             const refreshTokenExpiresTime = tokenPairConfig?.refreshTokenExpiresTime;
             const accessTokenExpiresTime = tokenPairConfig?.accessTokenExpiresTime;
+            console.log("Algo:", tokenPairConfig?.algorithm)
             const accessToken = jwt.sign(payload, privateKey, { expiresIn: accessTokenExpiresTime, algorithm: tokenPairConfig?.algorithm });
-            const refreshToken = jwt.sign(payload, privateKey, { expiresIn: refreshTokenExpiresTime });
+            const refreshToken = jwt.sign(payload, privateKey, { expiresIn: refreshTokenExpiresTime, algorithm: tokenPairConfig?.algorithm });
             return { accessToken, refreshToken }
         }
         catch (e) {

@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, NextFunction, Request, Response, Handler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { ResponseError } from "../constants/Error.constants";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 

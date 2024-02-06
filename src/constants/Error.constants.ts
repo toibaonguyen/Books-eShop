@@ -25,3 +25,9 @@ export class ForbiddenError extends ResponseError {
         super(message, StatusCodes.FORBIDDEN);
     }
 }
+
+export class NotFoundError extends ResponseError {
+    public constructor(message: string = ReasonPhrases.NOT_FOUND) {
+        super(message, StatusCodes.NOT_FOUND);
+    }
+}

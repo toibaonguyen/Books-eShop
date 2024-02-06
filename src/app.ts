@@ -1,4 +1,4 @@
-import "reflect-metadata"
+
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
@@ -27,7 +27,6 @@ database.Connect();
 
 //init router
 app.use(router);
-
 //error handler
 app.use(RequestErrorHandler.Handle);
 
