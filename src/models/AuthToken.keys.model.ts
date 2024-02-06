@@ -22,8 +22,11 @@ const authTokenSchema = new mongoose.Schema({
     usedRefreshTokens:
     {
         type: [String],
-        require: true,
         default: []
+    },
+    refreshToken: {
+        type: String,
+        require: true
     }
 }, { timestamps: true, collection: COLLECTION_NAME });
 

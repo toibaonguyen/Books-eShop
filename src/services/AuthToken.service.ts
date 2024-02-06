@@ -26,8 +26,11 @@ export class AuthTokenService {
                     format: 'pem'
                 }
             });
+            /**
+             * Create new auth token keys if there is not exist and update when it exist
+             */
             const tokens = TokenUtil.CreateTokenPair(payload, privateKey, { algorithm: "RS256", refreshTokenExpiresTime: "1h", accessTokenExpiresTime: "15m" });
-            await AuthTokenKeysModel.create({ user: uid, publicKey: publicKey })
+            await AuthTokenKeysModel.findOneAndUpdate({ user: uid }, { publicKey: publicKey, refreshToken: tokens.accessToken, usedRefreshTokens: [] }, { upsert: true, new: true });
             return tokens;
         }
         catch (e) {

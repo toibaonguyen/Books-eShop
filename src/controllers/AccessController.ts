@@ -4,7 +4,6 @@ import { CustomerDTO, CustomerType } from "../constants/Customer.constant";
 import { StatusCodes } from "http-status-codes";
 
 export class CustomerAccessController {
-
     public static async register(req: Request, res: Response, next: NextFunction) {
         try {
             const accessService = new CustomerAccessService();
@@ -21,6 +20,26 @@ export class CustomerAccessController {
 
             const response = await accessService.register(newCustomer)
             return res.status(StatusCodes.CREATED).json(
+                {
+                    metadata: response
+                }
+            )
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    public static async login(req: Request, res: Response, next: NextFunction) {
+        try {
+            const accessService = new CustomerAccessService();
+            const account =
+            {
+                email: req.body.email,
+                password: req.body.password
+            }
+
+            const response = await accessService.login(account)
+            return res.status(StatusCodes.OK).json(
                 {
                     metadata: response
                 }
