@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'; // Erase if already required
 import { CustomerType, Gender } from '../constants/User.constant';
 
-const COLLECTION_NAME = "Users"
+const COLLECTION_NAME = "Customer"
 const DOCUMENT_NAME = "Customer"
 
 // Declare the Schema of the Mongo model
