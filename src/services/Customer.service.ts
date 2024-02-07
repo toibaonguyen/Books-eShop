@@ -1,4 +1,4 @@
-import { CustomerDTO } from "../constants/Customer.constant";
+import { CustomerDTO } from "../constants/User.constant";
 import { BadRequestError } from "../constants/Error.constants";
 import CustomerModel from "../models/Customer.users.model";
 import bcrypt from "bcrypt";

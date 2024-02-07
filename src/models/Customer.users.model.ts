@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'; // Erase if already required
-import { CustomerType, Gender } from '../constants/Customer.constant';
+import { CustomerType, Gender } from '../constants/User.constant';
 
 const COLLECTION_NAME = "Users"
 const DOCUMENT_NAME = "Customer"

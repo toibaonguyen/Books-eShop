@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'; // Erase if already required
+import { Gender } from '../constants/User.constant';
 
 const COLLECTION_NAME = "Users"
 const DOCUMENT_NAME = "DeliveryPerson"
@@ -22,12 +23,17 @@ const deliveryPersonSchema = new mongoose.Schema({
     {
         type: String,
         required: true,
-        unique: true,
     },
     password:
     {
         type: String,
         required: true,
+    },
+    gender:
+    {
+        type: String,
+        require: true,
+        enum: Object.values(Gender),
     },
     salary:
     {
@@ -36,13 +42,13 @@ const deliveryPersonSchema = new mongoose.Schema({
     },
     addresses:
     {
-        type: Array,
+        type: [String],
         require: true,
         default: []
     },
     currentLocation:
     {
-        type: String
+        type: String,
     },
     isActive: {
         type: Boolean,
