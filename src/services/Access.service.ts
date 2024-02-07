@@ -1,5 +1,5 @@
 import { CustomerDTO, DeliveryPersonDTO, UserDTO } from "../constants/User.constant";
-import { BadRequestError, UnauthorizedError } from "../constants/Error.constants";
+import { BadRequestError, ForbiddenError, UnauthorizedError } from "../constants/Error.constants";
 import bcrypt from "bcrypt";
 import CustomerModel from "../models/Customer.users.model";
 import { TokenUtil } from "../utils/Token.util";
@@ -22,6 +22,7 @@ type SuccessloginResponse = {
 abstract class AccessService<T extends UserDTO> {
     protected INVALID_ACCOUNT = "Invalid email or password!";
     protected LOGOUT_FAIL = "Logout fail!";
+    protected INACTIVE_ACCOUNT = "This account is disable";
     public abstract register(user: T): Promise<SuccessloginResponse | void>;
     public abstract login(account: AccountDTO): Promise<SuccessloginResponse>;
     public abstract logout(userId: string): Promise<void>
@@ -51,6 +52,9 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
             const customer = await customerService.FindCustomerByEmail(account.email);
             if (!customer) {
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
+            }
+            if (!customer.isActive) {
+                throw new ForbiddenError(this.INACTIVE_ACCOUNT);
             }
             const match = bcrypt.compare(account.password, customer.password);
             if (!match) {
@@ -92,6 +96,9 @@ export class DeliveryPersonAccessService extends AccessService<DeliveryPersonDTO
             const deliveryPerson = await deliveryPersonService.FindDeliveryPersonByEmail(account.email);
             if (!deliveryPerson) {
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
+            }
+            if (!deliveryPerson.isActive) {
+                throw new ForbiddenError(this.INACTIVE_ACCOUNT);
             }
             const match = bcrypt.compare(account.password, deliveryPerson.password);
             if (!match) {
