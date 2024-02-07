@@ -23,7 +23,8 @@ export class DeliveryPersonService {
                     gender: user.gender,
                     birthday: user.birthday,
                     isActive: user.isActive,
-                    currentLocation: undefined
+                    currentLocation: undefined,
+                    salary: user.salary
                 })
                 return newCustomer;
             }
