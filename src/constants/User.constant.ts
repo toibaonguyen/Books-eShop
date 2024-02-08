@@ -1,11 +1,4 @@
 import { Date } from "mongoose";
-import exp from "node:constants";
-
-export enum CustomerType {
-    COMMON,
-    VIP1,
-    VIP2
-}
 
 export enum Gender {
     MALE,
@@ -31,13 +24,11 @@ export abstract class UserDTO {
 export class CustomerDTO extends UserDTO {
     public phone: string;
     public addresses: string[];
-    public type: CustomerType;
     public birthday: Date;
-    public constructor(name: string, email: string, phone: string, addresses: string[], password: string, type: CustomerType, gender: Gender, birthday: Date, isActive: boolean) {
+    public constructor(name: string, email: string, phone: string, addresses: string[], password: string, gender: Gender, birthday: Date, isActive: boolean) {
         super(name, email, password, gender, isActive)
         this.phone = phone;
         this.addresses = addresses;
-        this.type = type;
         this.birthday = birthday;
     }
 }

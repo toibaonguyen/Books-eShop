@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomerAccessService, DeliveryPersonAccessService } from "../services/Access.service";
-import { CustomerDTO, CustomerType, DeliveryPersonDTO } from "../constants/User.constant";
+import { CustomerDTO, DeliveryPersonDTO } from "../constants/User.constant";
 import { StatusCodes } from "http-status-codes";
 
 
@@ -15,7 +15,6 @@ export class CustomerAccessController {
                 req.body.phone,
                 req.body.addresses || [],
                 req.body.password,
-                CustomerType.COMMON,
                 req.body.gender,
                 req.body.birthday,
                 true)
@@ -41,6 +40,22 @@ export class CustomerAccessController {
             };
 
             const response = await accessService.login(account);
+            return res.status(StatusCodes.OK).json(
+                {
+                    metadata: response
+                }
+            );
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    public static async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            const accessService = new CustomerAccessService();
+            const authToken = req.body.authToken;
+
+            const response = await accessService.logout(authToken._id);
             return res.status(StatusCodes.OK).json(
                 {
                     metadata: response
@@ -92,5 +107,9 @@ export class DeliveryPersonAccessController {
         catch (e) {
             next(e);
         }
+    }
+
+    public static async logout(req: Request, res: Response, next: NextFunction) {
+
     }
 }

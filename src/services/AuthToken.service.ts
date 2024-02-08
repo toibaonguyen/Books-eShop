@@ -1,5 +1,5 @@
 
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { AuthTokenPairConfig } from "../configs/system.config";
 import AuthTokenKeysModel from "../models/AuthToken.keys.model";
 import { TokenUtil } from "../utils/Token.util";
@@ -30,8 +30,24 @@ export class AuthTokenService {
              * Create new auth token keys if there is not exist and update when it exist
              */
             const tokens = TokenUtil.CreateTokenPair(payload, privateKey, { algorithm: "RS256", refreshTokenExpiresTime: "1h", accessTokenExpiresTime: "15m" });
-            await AuthTokenKeysModel.findOneAndUpdate({ user: uid }, { publicKey: publicKey, refreshToken: tokens.accessToken, usedRefreshTokens: [] }, { upsert: true, new: true });
+            await AuthTokenKeysModel.findOneAndUpdate({ user: uid }, { publicKey: publicKey, refreshToken: tokens.refreshToken, usedRefreshTokens: [] }, { upsert: true, new: true });
             return tokens;
+        }
+        catch (e) {
+            throw e;
+        }
+    };
+    public async FindAuthTokensByUserId(userId: string) {
+        try {
+            return await AuthTokenKeysModel.findOne({ user: new Types.ObjectId(userId) }).lean();
+        }
+        catch (e) {
+            throw e;
+        }
+    };
+    public async RemoveAuthTokenById(id: string) {
+        try {
+            return await AuthTokenKeysModel.findByIdAndDelete(id).lean();
         }
         catch (e) {
             throw e;

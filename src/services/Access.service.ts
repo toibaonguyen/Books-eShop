@@ -25,7 +25,7 @@ abstract class AccessService<T extends UserDTO> {
     protected INACTIVE_ACCOUNT = "This account is disable";
     public abstract register(user: T): Promise<SuccessloginResponse | void>;
     public abstract login(account: AccountDTO): Promise<SuccessloginResponse>;
-    public abstract logout(userId: string): Promise<void>
+    public abstract logout(authTokenId: string): Promise<void>
 }
 
 //Customer...
@@ -35,7 +35,7 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
             const customerService = new CustomerService();
             const newCustomer = await customerService.CreateNewCustomer(customer);
             const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { id: newCustomer._id, email: newCustomer.email }, uid: newCustomer._id })
+            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: newCustomer._id, email: newCustomer.email }, uid: newCustomer._id })
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: newCustomer }),
                 tokens
@@ -61,7 +61,7 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
             }
             const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { id: customer._id, email: customer.email }, uid: customer._id })
+            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: customer._id, email: customer.email }, uid: customer._id })
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: customer }),
                 tokens
@@ -72,8 +72,9 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
         }
     }
 
-    public async logout(userId: string) {
-
+    public async logout(authTokenId: string) {
+        const authTokenService = new AuthTokenService();
+        await authTokenService.RemoveAuthTokenById(authTokenId);
     }
 }
 
@@ -105,7 +106,7 @@ export class DeliveryPersonAccessService extends AccessService<DeliveryPersonDTO
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
             }
             const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { id: deliveryPerson._id, email: deliveryPerson.email }, uid: deliveryPerson._id })
+            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: deliveryPerson._id, email: deliveryPerson.email }, uid: deliveryPerson._id })
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: deliveryPerson }),
                 tokens
@@ -116,7 +117,13 @@ export class DeliveryPersonAccessService extends AccessService<DeliveryPersonDTO
         }
     }
 
-    public async logout(userId: string) {
-
+    public async logout(authTokenId: string) {
+        try {
+            const authTokenService = new AuthTokenService();
+            await authTokenService.RemoveAuthTokenById(authTokenId);
+        }
+        catch (e) {
+            throw e;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiKeyPermissions } from "../constants/ApiKey.constant";
 import { BadRequestError, ForbiddenError, UnauthorizedError } from "../constants/Error.constants";
-import ApiKeyModel from "../models/ApiKey.keys.model";
+import { ApiKeyService } from "../services/ApiKey.service";
 
 export class ApiKeyChecker {
     private static MISSING_API_KEY = "Missing api key!";
@@ -9,11 +9,12 @@ export class ApiKeyChecker {
     private static PERMISSION_DENIED_API_KEY = "Permission denied!";
 
     public static VerifyApiKey = async (req: Request, res: Response, next: NextFunction) => {
-        const apiKey = req.headers["x-api-key"]?.toString();
-        if (!apiKey) {
+        const key = req.headers["x-api-key"]?.toString();
+        if (!key) {
             next(new UnauthorizedError(this.MISSING_API_KEY));
         }
-        const matchedApiKey = await ApiKeyModel.findOne({ key: apiKey }).lean();
+        const apiKeyService = new ApiKeyService();
+        const matchedApiKey = await apiKeyService.FindApiKeyByKey(key as string);
         if (!matchedApiKey || !matchedApiKey.isActive) {
             next(new BadRequestError(this.INVALID_API_KEY));
         }

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'; // Erase if already required
 import { Gender } from '../constants/User.constant';
+import { UserType } from '../constants/AuthToken.constants';
 
-const COLLECTION_NAME = "DeliveryPerson"
+const COLLECTION_NAME = "Users"
 const DOCUMENT_NAME = "DeliveryPerson"
 
 // Declare the Schema of the Mongo model
@@ -53,6 +54,11 @@ const deliveryPersonSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         require: true
+    },
+    userType: {
+        type: String,
+        enum: Object.values(UserType),
+        default: UserType.DELIVERY_PERSON
     }
 }, { timestamps: true, collection: COLLECTION_NAME });
 

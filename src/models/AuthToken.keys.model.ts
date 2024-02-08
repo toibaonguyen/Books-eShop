@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'; // Erase if already required
+import { UserType } from '../constants/AuthToken.constants';
 
 const COLLECTION_NAME = "Keys";
 const DOCUMENT_NAME = "AuthToken";

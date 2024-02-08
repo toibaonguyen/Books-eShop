@@ -15,6 +15,15 @@ export class TokenUtil {
             throw (e);
         }
     }
+    static VerifyToken(token: string, publicKey: string) {
+        try {
+            const decoded = jwt.verify(token, publicKey);
+            return decoded;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 
 }
 

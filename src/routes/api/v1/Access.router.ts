@@ -1,11 +1,12 @@
 import express from 'express';
 import { CustomerAccessController, DeliveryPersonAccessController } from '../../../controllers/AccessController';
+import { AuthManager } from '../../../middlewares/AuthManager.middleware';
 
 const router = express.Router();
 //We need some validation and api check from here
 router.post("/customer/register", CustomerAccessController.register);
 router.post("/customer/login", CustomerAccessController.login);
-// router.use("/customer/logout", CustomerAccessController.logout);
+router.use("/customer/logout", AuthManager.CustomerAuthorization, CustomerAccessController.logout);
 
 router.post("/delivery-person/register", DeliveryPersonAccessController.register);
 router.post("/delivery-person/login", DeliveryPersonAccessController.login);

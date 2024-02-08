@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'; // Erase if already required
-import { CustomerType, Gender } from '../constants/User.constant';
+import { Gender } from '../constants/User.constant';
+import { UserType } from '../constants/AuthToken.constants';
 
-const COLLECTION_NAME = "Customer"
-const DOCUMENT_NAME = "Customer"
+const COLLECTION_NAME = "Users";
+const DOCUMENT_NAME = "Customer";
 
 // Declare the Schema of the Mongo model
 const customerSchema = new mongoose.Schema({
@@ -23,7 +24,6 @@ const customerSchema = new mongoose.Schema({
     {
         type: String,
         required: true,
-        unique: true,
     },
     password:
     {
@@ -35,13 +35,6 @@ const customerSchema = new mongoose.Schema({
         type: [String],
         require: true,
         default: []
-    },
-    type:
-    {
-        type: String,
-        require: true,
-        enum: Object.values(CustomerType),
-        default: CustomerType.COMMON
     },
     gender:
     {
@@ -57,6 +50,11 @@ const customerSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         require: true
+    },
+    userType: {
+        type: String,
+        enum: Object.values(UserType),
+        default: UserType.CUSTOMER
     }
 }, { timestamps: true, collection: COLLECTION_NAME });
 

@@ -20,7 +20,7 @@ const apiKeySchema = new mongoose.Schema({
     },
     permissions:
     {
-        type: String,
+        type: [String],
         require: true,
         enum: Object.values(ApiKeyPermissions)
     }

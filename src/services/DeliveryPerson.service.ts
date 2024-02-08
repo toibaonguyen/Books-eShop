@@ -4,6 +4,7 @@ import DeliveryPersonModel from "../models/DeliveryPerson.users.model";
 import bcrypt from "bcrypt";
 import { AuthTokenService } from "./AuthToken.service";
 import { DataUtil } from "../utils/Data.util";
+import { UserType } from "../constants/AuthToken.constants";
 
 export class DeliveryPersonService {
     private ALREADY_REGISTERED_DELIVERY_PERSON = "This delivery person is already registered";
@@ -27,17 +28,25 @@ export class DeliveryPersonService {
                     salary: user.salary
                 })
                 return newCustomer;
+
             }
         }
         catch (e) {
             throw e;
         }
     }
-
     public async FindDeliveryPersonByEmail(email: string) {
         try {
-            const matchedEmailRegisteredCustomer = await DeliveryPersonModel.findOne({ email: email }).lean();
+            const matchedEmailRegisteredCustomer = await DeliveryPersonModel.findOne({ email: email, userType: UserType.DELIVERY_PERSON }).lean();
             return matchedEmailRegisteredCustomer;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    public async FindDeliveryPersonById(userId: string) {
+        try {
+            return await DeliveryPersonModel.findById(userId).findOne({ userType: UserType.DELIVERY_PERSON }).lean();
         }
         catch (e) {
             throw e;
