@@ -1,13 +1,13 @@
 import mongoose, { Schema } from 'mongoose'; // Erase if already required
-import { UserType } from '../constants/AuthToken.constants';
+import { UserType } from '../constants/User.constant';
 
 const COLLECTION_NAME = "Keys";
-const DOCUMENT_NAME = "AuthToken";
+const DOCUMENT_NAME = "AuthTokenStore";
 
 const COLLECTION_NAME_USER_REF = "Users";
 
 // Declare the Schema of the Mongo model
-const authTokenSchema = new mongoose.Schema({
+const authTokenStoreSchema = new mongoose.Schema({
     user:
     {
         type: Schema.Types.ObjectId,
@@ -20,9 +20,15 @@ const authTokenSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    privateKey:
+    {
+        type: String,
+        require: true
+    },
     usedRefreshTokens:
     {
         type: [String],
+        require: true,
         default: []
     },
     refreshToken: {
@@ -32,4 +38,4 @@ const authTokenSchema = new mongoose.Schema({
 }, { timestamps: true, collection: COLLECTION_NAME });
 
 //Export the model
-export default mongoose.model(DOCUMENT_NAME, authTokenSchema);
+export default mongoose.model(DOCUMENT_NAME, authTokenStoreSchema);

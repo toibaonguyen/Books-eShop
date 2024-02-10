@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'; // Erase if already required
 import { Gender } from '../constants/User.constant';
-import { UserType } from '../constants/AuthToken.constants';
+import { UserType } from '../constants/User.constant';
 
 const COLLECTION_NAME = "Users";
 const DOCUMENT_NAME = "Customer";

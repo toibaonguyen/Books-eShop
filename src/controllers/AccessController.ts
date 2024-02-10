@@ -6,6 +6,18 @@ import { StatusCodes } from "http-status-codes";
 
 //Customer...
 export class CustomerAccessController {
+    public static async RefreshToken(req: Request, res: Response, next: NextFunction) {
+        try {
+            const accessService = new CustomerAccessService();
+            return res.status(StatusCodes.OK).json({
+                metadata: await accessService.handleRefreshToken(req.body.authTokenStore._id, req.body.refreshToken)
+            });
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
     public static async register(req: Request, res: Response, next: NextFunction) {
         try {
             const accessService = new CustomerAccessService();
@@ -53,12 +65,11 @@ export class CustomerAccessController {
     public static async logout(req: Request, res: Response, next: NextFunction) {
         try {
             const accessService = new CustomerAccessService();
-            const authToken = req.body.authToken;
-
-            const response = await accessService.logout(authToken._id);
+            const authTokenStore = req.body.authTokenStore;
+            const response = await accessService.logout(authTokenStore._id);
             return res.status(StatusCodes.OK).json(
                 {
-                    metadata: response
+                    message: response
                 }
             );
         }
@@ -110,6 +121,18 @@ export class DeliveryPersonAccessController {
     }
 
     public static async logout(req: Request, res: Response, next: NextFunction) {
-
+        try {
+            const accessService = new DeliveryPersonAccessService();
+            const authTokenStore = req.body.authTokenStore;
+            const response = await accessService.logout(authTokenStore._id);
+            return res.status(StatusCodes.OK).json(
+                {
+                    message: response
+                }
+            );
+        }
+        catch (e) {
+            next(e);
+        }
     }
 }

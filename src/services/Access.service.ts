@@ -5,7 +5,7 @@ import CustomerModel from "../models/Customer.users.model";
 import { TokenUtil } from "../utils/Token.util";
 import crypto from "node:crypto";
 import { DataUtil } from "../utils/Data.util";
-import { AuthTokenService } from "./AuthToken.service";
+import { AuthTokenStoreService } from "./AuthTokenStore.service";
 import { CustomerService } from "./Customer.service";
 import { AccountDTO } from "../constants/Access.constant";
 import { DeliveryPersonService } from "./DeliveryPerson.service";
@@ -22,10 +22,49 @@ type SuccessloginResponse = {
 abstract class AccessService<T extends UserDTO> {
     protected INVALID_ACCOUNT = "Invalid email or password!";
     protected LOGOUT_FAIL = "Logout fail!";
+    protected LOGOUT_SUCCESSFULLY = "Logout successfully!";
     protected INACTIVE_ACCOUNT = "This account is disable";
+    protected AUTH_TOKEN_STORE_NOT_FOUND = "Invalid token";
+    protected REFRESH_TOKEN_IS_ALREADY_RENEWED = "Something wrong, please login again!";
     public abstract register(user: T): Promise<SuccessloginResponse | void>;
     public abstract login(account: AccountDTO): Promise<SuccessloginResponse>;
-    public abstract logout(authTokenId: string): Promise<void>
+
+    public async logout(authTokenStoreId: string) {
+        try {
+            const authTokenStoreService = new AuthTokenStoreService();
+            const delAuthTokenStoreStore = await authTokenStoreService.RemoveAuthTokenStoreById(authTokenStoreId);
+            if (!delAuthTokenStoreStore) {
+                throw new BadRequestError(this.LOGOUT_FAIL);
+            }
+            return this.LOGOUT_SUCCESSFULLY;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+
+    public async handleRefreshToken(authTokenStoreId: string, refreshToken: string) {
+        try {
+            const authTokenStoreService = new AuthTokenStoreService();
+            const authTokenStore = await authTokenStoreService.FindAuthTokenStoresById(authTokenStoreId)
+            if (!authTokenStore) {
+                throw new BadRequestError(this.AUTH_TOKEN_STORE_NOT_FOUND);
+            }
+            if (authTokenStore.usedRefreshTokens.includes(refreshToken)) {
+                await this.logout(authTokenStore._id.toString());
+                throw new BadRequestError(this.REFRESH_TOKEN_IS_ALREADY_RENEWED);
+            }
+            if (authTokenStore.refreshToken != refreshToken) {
+                throw new BadRequestError(this.AUTH_TOKEN_STORE_NOT_FOUND);
+            }
+            console.log("authTokenStoreId::", authTokenStore._id.toString())
+            const tokens = await authTokenStoreService.UpdateNewTokenPair(authTokenStore._id.toString());
+            return tokens;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 }
 
 //Customer...
@@ -34,8 +73,8 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
         try {
             const customerService = new CustomerService();
             const newCustomer = await customerService.CreateNewCustomer(customer);
-            const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: newCustomer._id, email: newCustomer.email }, uid: newCustomer._id })
+            const authTokenStoreService = new AuthTokenStoreService();
+            const tokens = await authTokenStoreService.CreateTokenPairAndAuthTokenStore({ payload: { userId: newCustomer._id, email: newCustomer.email }, uid: newCustomer._id })
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: newCustomer }),
                 tokens
@@ -60,8 +99,8 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
             if (!match) {
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
             }
-            const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: customer._id, email: customer.email }, uid: customer._id })
+            const authTokenStoreService = new AuthTokenStoreService();
+            const tokens = await authTokenStoreService.CreateTokenPairAndAuthTokenStore({ payload: { userId: customer._id, email: customer.email }, uid: customer._id });
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: customer }),
                 tokens
@@ -72,10 +111,6 @@ export class CustomerAccessService extends AccessService<CustomerDTO> {
         }
     }
 
-    public async logout(authTokenId: string) {
-        const authTokenService = new AuthTokenService();
-        await authTokenService.RemoveAuthTokenById(authTokenId);
-    }
 }
 
 
@@ -105,8 +140,8 @@ export class DeliveryPersonAccessService extends AccessService<DeliveryPersonDTO
             if (!match) {
                 throw new UnauthorizedError(this.INVALID_ACCOUNT);
             }
-            const authTokenService = new AuthTokenService();
-            const tokens = await authTokenService.CreateTokenPair({ payload: { userId: deliveryPerson._id, email: deliveryPerson.email }, uid: deliveryPerson._id })
+            const authTokenStoreService = new AuthTokenStoreService();
+            const tokens = await authTokenStoreService.CreateTokenPairAndAuthTokenStore({ payload: { userId: deliveryPerson._id, email: deliveryPerson.email }, uid: deliveryPerson._id })
             return {
                 user: DataUtil.GetSpecificDataFromObject({ fields: ["_id", "email", "name"], object: deliveryPerson }),
                 tokens
@@ -117,13 +152,4 @@ export class DeliveryPersonAccessService extends AccessService<DeliveryPersonDTO
         }
     }
 
-    public async logout(authTokenId: string) {
-        try {
-            const authTokenService = new AuthTokenService();
-            await authTokenService.RemoveAuthTokenById(authTokenId);
-        }
-        catch (e) {
-            throw e;
-        }
-    }
 }

@@ -1,5 +1,11 @@
 import { Date } from "mongoose";
 
+export enum UserType {
+    CUSTOMER,
+    DELIVERY_PERSON,
+    ADMIN
+}
+
 export enum Gender {
     MALE,
     FEMALE,

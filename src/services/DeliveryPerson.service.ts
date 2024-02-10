@@ -1,10 +1,9 @@
-import { CustomerDTO, DeliveryPersonDTO } from "../constants/User.constant";
+import { CustomerDTO, DeliveryPersonDTO, UserType } from "../constants/User.constant";
 import { BadRequestError } from "../constants/Error.constants";
 import DeliveryPersonModel from "../models/DeliveryPerson.users.model";
 import bcrypt from "bcrypt";
-import { AuthTokenService } from "./AuthToken.service";
+import { AuthTokenStoreService } from "./AuthTokenStore.service";
 import { DataUtil } from "../utils/Data.util";
-import { UserType } from "../constants/AuthToken.constants";
 
 export class DeliveryPersonService {
     private ALREADY_REGISTERED_DELIVERY_PERSON = "This delivery person is already registered";

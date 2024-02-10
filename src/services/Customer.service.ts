@@ -2,9 +2,8 @@ import { CustomerDTO } from "../constants/User.constant";
 import { BadRequestError } from "../constants/Error.constants";
 import CustomerModel from "../models/Customer.users.model";
 import bcrypt from "bcrypt";
-import { AuthTokenService } from "./AuthToken.service";
-import { DataUtil } from "../utils/Data.util";
-import { UserType } from "../constants/AuthToken.constants";
+import { AuthTokenStoreService } from "./AuthTokenStore.service";
+import { UserType } from "../constants/User.constant";
 
 export class CustomerService {
     private ALREADY_REGISTERED_CUSTOMER = "This customer is already registered";
