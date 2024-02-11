@@ -57,7 +57,6 @@ abstract class AccessService<T extends UserDTO> {
             if (authTokenStore.refreshToken != refreshToken) {
                 throw new BadRequestError(this.AUTH_TOKEN_STORE_NOT_FOUND);
             }
-            console.log("authTokenStoreId::", authTokenStore._id.toString())
             const tokens = await authTokenStoreService.UpdateNewTokenPair(authTokenStore._id.toString());
             return tokens;
         }

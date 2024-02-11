@@ -42,6 +42,9 @@ export class AuthManager {
             }
             const authService = new AuthTokenStoreService();
             const matchedAuthTokenStore = await authService.FindAuthTokenStoresByUserId(userId as string);
+            if (!matchedAuthTokenStore) {
+                throw (new UnauthorizedError(this.NOT_FOUND_AUTH_TOKEN));
+            }
             req.body.authTokenStore = matchedAuthTokenStore;
             next();
         }
